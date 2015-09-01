@@ -745,7 +745,7 @@ def readTreeTable(vw, db):
         tree.SampleGroup = sg
         tree.TreeDefaultValue = tdv
         
-        tree.TreeNumber = row.Tree
+        tree.TreeNumber = getattrInt(row, "Tree")		
         tree.STM = row.STM 
         tree.Species = row.Sp
         tree.CountOrMeasure = row.CM
