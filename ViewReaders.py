@@ -14,172 +14,7 @@ log = Logger.Logger()
 
 
 createdBy = 'COConver Utility'
-# createdDate = ''#'current_date'
 
-# import TableManager
-# tableManager = TableManager.TableManager()
-
-#function InsertData:
-#builds and executes sql insert statments to insert data into sql tables 
-#takes tableName - name of the sql table to insert data into
-#      fieldNames - list of sql columns that the data will be inseted into
-#      dataList - data to insert, data must be in same order as fieldNames
-#      cursor - db cursor object
-
-# def insertData(tableName, fieldNames, dataList, cursor):
-#     for data in dataList:
-#         
-#         valueString = []
-#         for v in data:
-#             if isinstance(v,str): #if value is a string
-#                 if v == 'current_date':
-#                     valueString.append(v)
-#                 else:                
-#                     v = v.replace("'", "''")
-#                     valueString.append("'{0}'".format(v))#add single quotes
-#             else:
-#                 if(v == None):
-#                     valueString.append('NULL')
-#                 else:
-#                     valueString.append(str(v))
-#         valueString = ','.join(valueString)
-#         
-#         command = 'insert into {0}({1}) values ({2});'.format(tableName, ','.join(fieldNames), valueString)
-#         log.lg('low', command)
-#         cursor.execute(command)
-
-#function getKeyValues:
-#helper function for retrieving key data form a metakit view
-#takes:  row - the metakit row to retriev the data from 
-#        keyPropertys - a list containg strings itentefying the mk props to retrieve data from
-#        keyConstructer = optional arg takes the data type to insert the data into
-#                         in most cases this will be a namedtuple customized for the key
-# def getKeyValues(row, keyPropertys, keyConstructer = tuple):
-#     values = []
-#     for propName in keyPropertys:
-#         values.append(getattr(row, propName))
-#     if keyConstructer == tuple:
-#         return keyConstructer(values)
-#     else:
-#         return keyConstructer(*values)
-
-# #Below are groups of table key namedtuples, table fields lists, table data namedtuples and table propertys lists
-# #table key namedtuples are intended to store data from rows that allow forgen keys to be resolved to that row's data and behave like a struct in C#
-# #table field lists store a list of ordered sql field names for the coresponding table
-# #table data namedtuples store all the data for each sql field for each row and contain data members for each field in the table's coresponding data field list
-# #table propertys list is a list of metakit propertys that need to be accessed to populate SOME of the table fields *
-# # *note the order of items in the property list should match the order of the corespondeing fields in the table fields list and
-# #    fields not generated directaly from the property list (such as forgen keys) should should be at the end or beginning of the table field list, not mix in
-# 
-# SaleTableKey = collections.namedtuple('SaleTableKey', 'SaleNo')
-# saleTableFields = 'SaleNumber Name Purpose Region Forest District CalendarYear Remarks CreatedBy CreatedDate'
-# SaleTableData = collections.namedtuple('SaleTableData', saleTableFields)
-# saleTablePropertys = 'SaleNo SaleName Purpose Region Forest District CalYear Remarks'.split()
-# 
-# #CruiseTableKey = collections.namedtuple('CruiseTableKey', 'CruiseNo')
-# #cruiseTableFields = 'Sale_CN CruiseNumber Purpose CruiseType CreatedBy CreatedDate'
-# #CruiseTableData = collections.namedtuple('CruiseTableData', cruiseTableFields)
-# #cruiseTablePropertys = 'CruiseNo Purpose CruiseType'.split()
-# 
-# cuttingUnitKeyPropertys = ['CutUnit']
-# CuttingUnitKey = collections.namedtuple('CuttingUnitKey', 'CutUnit')
-# cuttingUnitFields = 'Code Area Description LoggingMethod PaymentUnit CreatedBy CreatedDate'
-# CuttingUnitData = collections.namedtuple('CuttingUnitData', cuttingUnitFields)
-# cuttingUnitPropertys = 'CutUnit Area Description LogMeth PayUnit'.split()
-# 
-# stratumKeyPropertys = 'Stratum'
-# StratumKey = collections.namedtuple('StratumTableKey', stratumKeyPropertys)
-# stratumFields = 'Code Description Method BasalAreaFactor FixedPlotSize Month Year CreatedBy CreatedDate'
-# StratumData = collections.namedtuple('StratumTableData', stratumFields)
-# stratumPropertys = 'Stratum Description CruzMeth BAF FPSize Month Year'.split()
-# 
-# cutUnitStratumFields = 'CuttingUnit_CN Stratum_CN'
-# CutUnitStratumMap = collections.namedtuple('CutUnitStratumMap', 'CuttingUnit_CN Stratum_CN')
-# 
-# sampleGroupDefaultFields = 'TreeDefaultValue_CN SampleGroup_CN'
-# SampleGroupDefaultMap = collections.namedtuple('SampleGroupDefaultMap', sampleGroupDefaultFields)
-# sampleGroupDefaultKeyPropertys = 'Stratum SG Sp'
-# SampleGroupDefaultKey = collections.namedtuple('SampleGroupDefaultKey', sampleGroupDefaultKeyPropertys)
-# 
-# sampleGroupFields = 'Stratum_CN Code CutLeave UOM PrimaryProduct SecondaryProduct DefaultLiveDead SamplingFrequency KZ Description CreatedBy CreatedDate'
-# SampleGroupData = collections.namedtuple('SampleGroupData', sampleGroupFields)
-# sgDataPropertys = 'SG CL UOMP ProdP ProdS LD Freq KZ Description'.split()
-# sampleGroupKeyPropertys = 'SG Stratum'
-# SampleGroupKey = collections.namedtuple('SampleGroupKey', sampleGroupKeyPropertys)
-# 
-# treeDefaultPropertys = 'Sp ProdP LD CDefP HDefP CDefS HDefS RecDefP ContrSpec TreeGrade MrchHtT MrchHtLL FC DBHBTR AvgZForm'
-# TreeDefaultData = collections.namedtuple('TreeDefaultData', treeDefaultPropertys)
-# TreeDefaultKey = collections.namedtuple('TreeDefaultKey', treeDefaultPropertys)
-# treeDefaultFields = 'Species PrimaryProduct LiveDead CullPrimary HiddenPrimary CullSecondary HiddenSecondary Recoverable ContractSpecies TreeGrade MerchHeightType MerchHeightLogLength FormClass BarkThicknessRatio AverageZ'.split()
-# 
-# 
-# 
-# tallyKeyPropertys = 'Key Description'
-# TallyKey = collections.namedtuple('TallyKey', tallyKeyPropertys)
-# tallyFields = 'HotKey Description'
-# 
-# countTreeKeyPropertys = 'CutUnit Stratum SG Sp'
-# CountTreeKey = collections.namedtuple('CountTreeKey', countTreeKeyPropertys)
-# countTreesFields = 'SampleGroup_CN CuttingUnit_CN Tally_CN TreeDefaultValue_CN TreeCount SumKPI CreatedBy CreatedDate'#removed species_3p
-# CountTreesData = collections.namedtuple('CountTreesData', countTreesFields)
-# #countTreesPropertys = ...
-# 
-# plotKeyPropertys ='Stratum CutUnit Plot'
-# PlotKey = collections.namedtuple('PlotKey', 'Stratum CutUnit Plot')
-# plotDataFields = 'Stratum_CN CuttingUnit_CN PlotNumber Slope Aspect IsEmpty XCoordinate YCoordinate ZCoordinate MetaData Remarks CreatedBy CreatedDate'
-# PlotData = collections.namedtuple('PlotData', plotDataFields)
-# plotDataPropertys = 'Plot SlopePct Aspect NullPlot XCoord YCoord ZCoord MetaData Remark'.split()
-# 
-# treeKeyPropertys = 'Stratum CutUnit Plot Tree'
-# TreeKey = collections.namedtuple('TreeKey', treeKeyPropertys)
-# treeDataFields = '''TreeDefaultValue_CN Stratum_CN SampleGroup_CN CuttingUnit_CN Plot_CN 
-#     TreeNumber STM Species CountOrMeasure TreeCount 
-#     KPI SeenDefectPrimary SeenDefectSecondary RecoverablePrimary 
-#     Initials LiveDead Grade HeightToFirstLiveLimb PoleLength ClearFace 
-#     CrownRatio DBH DRC TotalHeight MerchHeightPrimary MerchHeightSecondary 
-#     FormClass UpperStemDOB UpperStemHeight DBHDoubleBarkThickness 
-#     TopDIBPrimary TopDIBSecondary DefectCode DiameterAtDefect VoidPercent Remarks CreatedBy CreatedDate'''
-# TreeData = collections.namedtuple('TreeData', treeDataFields)
-# treeDataPropertys = '''Tree STM Sp CM TreeCnt KPI SDefP SDefS RecDefP 
-#     Initials LD TreeGrade HgtFLL PoleLen Clear CR DBH DRCOB TotHt MrchHtP 
-#     MrchHtS FC UStemDOB HgtUStem DBHDBT TopDIBP TopDIBS DefectCode
-#     DiamDefPt VoidPct Remarks'''.split()
-# 
-# logKeyPropertys = 'Stratum CutUnit Plot Tree LogNum'.split()    
-# logDataFields = 'Tree_CN LogNumber Grade SeenDefect PercentRecoverable Length ExportGrade SmallEndDiameter LargeEndDiameter GrossBoardFoot NetBoardFoot GrossCubicFoot NetCubicFoot BoardFootRemoved CubicFootRemoved DIBClass BarkThickness CreatedBy CreatedDate'
-# LogData = collections.namedtuple('LogData', logDataFields)
-# logDataPropertys = 'LogNum Grade PctSeenDef PctRecChip Length Sort SErD LErD GBDFT NBDFT GCUFT NCUFT BDFTRem CUFTRem DIBCls DBT'.split()
-# 
-# volumeEquationKey = 'VolEqSpecie VolEqPP VolEqNum'.split()
-# volumeEquationFields = 'Species PrimaryProduct VolumeEquationNumber StumpHeight TopDIBPrimary TopDIBSecondary CalcTotal CalcBoard CalcCubic CalcCord CalcTopWood'
-# VolumeEquationData = collections.namedtuple('VolumeEquationData', volumeEquationFields)
-# volumeEquationPropertys = 'VolEqSpecie VolEqPP VolEqNum VolEqStump VolEqTopDIBP VolEqTopDIBS'.split()
-# 
-# #global config has no unique constraints so im not going to bother with a key for it
-# globalConfigFields = 'Block Key Value'
-# globalConfigPropertys = globalConfigFields
-# GlobalConfigData = collections.namedtuple('GlobalConfigData', globalConfigFields)
-# 
-# #no unique/no key
-# messageLogFields = 'Message Date Time Level'
-# MessageLogData = collections.namedtuple('MessageLogData', messageLogFields)
-# messageLogPropertys = 'Msg Date Time Level'.split()
-# 
-# #this table is a little strange, look at readWeightEquationTable to see how im doing keys
-# weightEquationFields = 'Species PrimaryProduct LiveDead WeightFactorPrimary WeightFactorSecondary PercentRemovedPrimary PercentRemovedSecondary'
-# WeightEquationData = collections.namedtuple('WeightEquationData', weightEquationFields)
-# weightEquationPropertys = 'WgtEqSpecie WgtEqPP WgtEqLiveDead WgtEqFactor WgtEqFactor2 WgtEqPercent WgtEqPercent2'
-# 
-# bioEquationFields = 'Species Product Component Equation PercentMoisture PercentRemoved'
-# BioEquationData = collections.namedtuple('BioEquationData', bioEquationFields)
-# 
-# valueEquationPropertys = 'ValEQSpecie ValEqPP ValEqNum ValEqGrade ValEqCoef1 ValEqCoef2 ValEqCoef3 ValEqCoef4 ValEqCoef5 ValEqCoef6'
-# valueEquationFields = 'Species PrimaryProduct ValueEquationNumber Grade Coefficient1 Coefficient2 Coefficient3 Coefficient4 Coefficient5 Coefficient6'
-# ValueEquationData = collections.namedtuple('ValueEquationData', valueEquationFields)  
-# 
-# qaEquationPropertys = 'QaEqSpecie QaEqNum QaEqYear QaEqGrade QaEqCoef1 QaEqCoef2 QaEqCoef3 QaEqCoef4 QaEqCoef5 QaEqCoef6'
-# qualityAdjEquationFields = 'Species QualityAdjEq Year Grade Coefficient1 Coeffiecient2 Coefficient3 Coefficient4 coefficient5 Coeffieient6' 
-# QAEquationData = collections.namedtuple('QAEquationData', qualityAdjEquationFields)
 import clr
 clr.AddReference('CruiseDAL')
 clr.AddReference('System')
@@ -191,23 +26,21 @@ def toFloat(val):
     return float(val) if val else 0.0
 
 #utility method for getting float values from metakit
-#used for catching obviously corrupt values 
+#used for catching obviously corrupt values
 #e(epsilon) is the smallest a value can be, before it is considered 0
 #max is the largest value we can reasonably expect
-def getattrFloat(source, attr, e = 2.3283064e-10, max = 2000000):
+def getattrFloat(source, attr, e=2.3283064e-10, max=2000000):
     value = None
     try:
         value = getattr(source, attr)
         if not isinstance(value, float):
             value = float(value)
     except:
-        log.lg('low',"overriding value {0} on property {1} with 0.0 (float)".format(repr(value), attr))
+        log.lg('low', "overriding value {0} on property {1} with 0.0 (float)".format(repr(value), attr))
         value = 0.0
-        
-    
-        
-    if (value != 0.0 and (abs(value) < e or abs(value) > max)):
-        log.lg("high","overriding value {0} on property {1} with 0.0 (float)".format(repr(value), attr))
+
+    if value != 0.0 and (abs(value) < e or abs(value) > max):
+        log.lg("high", "overriding value {0} on property {1} with 0.0 (float)".format(repr(value), attr))
         value = 0.0
     return value
 
@@ -218,27 +51,19 @@ def getattrInt(source, attr):
         if not isinstance(value, int):
             value = int(value)
             pass
-        
     except:
-        log.lg("low","overriding value {0} on property {1} with 0 (int)".format(repr(value), attr))
+        log.lg("low", "overriding value {0} on property {1} with 0 (int)".format(repr(value), attr))
         value = 0
         pass
-    
     return value
 
 
-    
-    
-
-
 def readCruiseTable(vw, dal):
-    
     from CruiseDAL.DataObjects import SaleDO
-    log.lg('norm','START reading cruise table')
-    
+    log.lg('norm', 'START reading cruise table')
     for row in vw:
         sale = SaleDO(dal)
-        sale.SaleNumber = getattr(row,'SaleNo')
+        sale.SaleNumber = getattr(row, 'SaleNo')
         sale.Name = row.SaleName
         sale.Purpose = row.Purpose
         sale.Region = row.Region
@@ -247,14 +72,11 @@ def readCruiseTable(vw, dal):
         sale.CalendarYear = getattrInt(row, 'CalYear')
         sale.Remarks = row.Remarks
         sale.Save()
-        log.lg('low','Created Record :' + str(sale.rowID))
-        
-        
+        log.lg('low', 'Created Record :' + str(sale.rowID))
 
-        
 def readCuttingUnitsTable(vw, dal):
     from CruiseDAL.DataObjects import CuttingUnitDO
-    log.lg('norm','START reading cuttingunits table')
+    log.lg('norm', 'START reading cuttingunits table')
 
 
     for row in vw:
@@ -265,19 +87,18 @@ def readCuttingUnitsTable(vw, dal):
         unit.LoggingMethod = row.LogMeth
         unit.PaymentUnit = row.PayUnit
         unit.Save()
-        log.lg('low','Created Record :' + str(unit.rowID))
+        log.lg('low', 'Created Record :' + str(unit.rowID))
 
 #         
         
 def readStratumTable(vw, dal):
 
-    log.lg('norm','START reading stratum table')
+    log.lg('norm', 'START reading stratum table')
     from CruiseDAL.DataObjects import StratumDO
     from CruiseDAL.DataObjects import CuttingUnitDO
 
 
     for row in vw:
-        
         stratum = StratumDO(dal)
         stratum.Code = str.strip(row.Stratum)
         stratum.Description = row.Description
@@ -288,44 +109,25 @@ def readStratumTable(vw, dal):
         stratum.Year = row.Year
         
         stratum.Save()
-        log.lg('low','Created Record :' + str(stratum.rowID))
+        log.lg('low', 'Created Record :' + str(stratum.rowID))
         unitCodes = row.Units.split(',')
         for c in unitCodes:
             prams = Array.CreateInstance(Object, 1)
             prams[0] = str.strip(c)
-            unit = dal.ReadSingleRow[CuttingUnitDO]('CuttingUnit', 'WHERE Code = ?', prams )
-            if not unit: 
+            unit = dal.ReadSingleRow[CuttingUnitDO]('CuttingUnit', 'WHERE Code = ?', prams)
+            if not unit:
                 log.lg('high', 'unable to locate Cutting Unit record in Stratum table. Unit Code: ' + c)
             stratum.CuttingUnits.Add(unit)
         stratum.CuttingUnits.Save()
-
-            
-        
-
-#         #store cruzMeth for later use 
-#         tableManager.setTag('Stratum', currentStTK, getattr(row,'CruzMeth'))
-#         
-
-#         for k in getattr(row, 'Units').split(','):
-#             k = str.strip(k)                                                #remove excess white space
-#             key = CuttingUnitKey(k)                                         #make a cutting unit key
-#             cutUnitIndex = tableManager.getKeyIndex('CuttingUnit', key)     #find corresponding cutting unit index
-#             cutUnitStratumMaps.append(CutUnitStratumMap(cutUnitIndex, stratumIndex))
-#         
-
-        
     
 def readSubPopTable(vw, dal):
     log.lg('norm','START reading subpopulation table')
-    
     
     from CruiseDAL.DataObjects import StratumDO
     from CruiseDAL.DataObjects import SampleGroupDO
     from CruiseDAL.DataObjects import TreeDefaultValueDO
 
-
-    
-    for row in vw:  
+    for row in vw:
         prams = Array[Object]((str.strip(row.Stratum), ))
 
         currentSt = dal.ReadSingleRow[StratumDO]('Stratum', 'WHERE Code = ?', prams)
@@ -346,11 +148,10 @@ def readSubPopTable(vw, dal):
             currentSG.Description = row.Description
             currentSG.Stratum = currentSt
 			#if default live dead is null or empty
-            if not currentSG.DefaultLiveDead:  
-                currentSG.DefaultLiveDead = "L" #fill in "L" as default				
+            if not currentSG.DefaultLiveDead:
+                currentSG.DefaultLiveDead = "L" #fill in "L" as default
             currentSG.Save()
-            log.lg('low','Created SG Record :' + str(currentSG.rowID))
-        
+            log.lg('low', 'Created SG Record :' + str(currentSG.rowID))
 
         currentTDV = dal.ReadSingleRow[TreeDefaultValueDO]('TreeDefaultValue', 
 '''WHERE Species = ? 
@@ -381,66 +182,20 @@ Array[Object]((row.Sp, row.ProdP, row.LD, row.YC)) )
             currentTDV.CullPrimary = getattrFloat(row, "CDefP")
             currentTDV.HiddenPrimary = getattrFloat(row, "HDefP")
             currentTDV.CullSecondary = getattrFloat(row, "CDefS")
-            currentTDV.HiddenSecondary = getattrFloat(row ,"HDefS")
-            currentTDV.Recoverable = getattrFloat(row ,"RecDefP")
-            currentTDV.ContractSpecies = row.ContrSpec 
+            currentTDV.HiddenSecondary = getattrFloat(row, "HDefS")
+            currentTDV.Recoverable = getattrFloat(row, "RecDefP")
+            currentTDV.ContractSpecies = row.ContrSpec
             currentTDV.TreeGrade = row.TreeGrade
             currentTDV.MerchHeightType = row.MrchHtT
             currentTDV.MerchHeightLogLength = row.MrchHtLL
             currentTDV.FormClass = row.FC
             currentTDV.BarkThicknessRatio = getattrFloat(row, "DBHBTR")
-            currentTDV.AverageZ = getattrFloat(row ,"AvgZForm")
+            currentTDV.AverageZ = getattrFloat(row,"AvgZForm")
             currentTDV.Save()
-            log.lg('low','Created TDV Record :' + str(currentTDV.rowID))
+            log.lg('low', 'Created TDV Record :' + str(currentTDV.rowID))
         
         currentSG.TreeDefaultValues.Add(currentTDV)
         currentSG.TreeDefaultValues.Save()
-     
-#         currentSGKIndex = None
-#         if tableManager.hasKey('SampleGroup', currentSGK) == True:
-#             currentSGKIndex= tableManager.getKeyIndex('SampleGroup', currentSGK)
-#         else:
-#             currentSGKIndex = tableManager.addKeyIndex('SampleGroup', currentSGK)
-#             
-#             values = []
-#             stratumKey = StratumKey(getattr(row,'Stratum'))
-#             values.append(tableManager.getKeyIndex('Stratum', stratumKey))
-#             for propName in sgDataPropertys:
-#                 if(propName == 'ProdP' and getattr(row, propName) == None ):
-#                     values.append('02') # if primary product not used default to 02
-#                 else:
-#                     values.append(getattr(row, propName))
-#             values.append(createdBy)
-#             values.append(createdDate)
-#             sgData.append(SampleGroupData(*values))
-#             
-#         #HACK because some types in the TreeDefault table dont match the types in metakit 
-#         #a special case must be made
-#         currentTDK = getKeyValues(row, treeDefaultPropertys.split(), TreeDefaultKey)
-#         values = []
-#         for propName in treeDefaultPropertys.split():
-#             if propName in {'CDefP', 'HDefP', 'CDefS', 'HDefS', 'RecDefP'}:
-#                 value = getattr(row, propName)
-#                 if value == '':
-#                     value = None
-#                 else:
-#                     value = float(value)
-#                 values.append(value)
-#             else:
-#                 values.append(getattr(row, propName))
-#         if(tableManager.hasKey('TreeDefaults', currentTDK) == False):
-#             tdData.append(TreeDefaultData(*values))
-#             currentTDKIndex = tableManager.addKeyIndex('TreeDefaults', currentTDK, False)
-#         else:
-#             currentTDKIndex = tableManager.getKeyIndex('TreeDefaults', currentTDK)
-#         
-#         #add currenSGK / currentTDK pair to samplegroupDefaults set 
-#         currentSGTDVK = getKeyValues(row, sampleGroupDefaultKeyPropertys.split(), SampleGroupDefaultKey)
-#         currentSGTDVData = SampleGroupDefaultMap( currentTDKIndex, currentSGKIndex)
-#         sgDefaultMaps.add( currentSGTDVData)
-#         tableManager.addKeyIndex('SampleGroupDefault', currentSGTDVK)
-#         tableManager.setTag('SampleGroupDefault', currentSGTDVK, currentSGTDVData)
-#               
 
 
 def readCountTable(vw, db):
@@ -484,75 +239,6 @@ def readCountTable(vw, db):
         count.Save()
         log.lg('low','Created Record :' + str(count.rowID))
         
-        
-#         countTreeKey = getKeyValues(row, countTreeKeyPropertys.split(), CountTreeKey)
-#         
-#         countTreeKeys.append(countTreeKey)
-#         
-#         currentSGK = getKeyValues(row, sampleGroupKeyPropertys.split(), SampleGroupKey)
-#         currentSGKIndex = tableManager.getKeyIndex('SampleGroup', currentSGK)
-#         
-#         currentCUTK = getKeyValues(row, cuttingUnitKeyPropertys, CuttingUnitKey)
-#         currentCUTKIndex = tableManager.getKeyIndex('CuttingUnit', currentCUTK)
-#         
-#         #try to get the TreeDefaultValue_CN
-#         try:
-#             currentSGTDVK = getKeyValues(row, sampleGroupDefaultKeyPropertys.split(), SampleGroupDefaultKey)
-#             currentTDKIndex = tableManager.getTag('SampleGroupDefault', currentSGTDVK).TreeDefaultValue_CN
-#         except:
-#             currentTDKIndex = None
-#             
-#         #all data going into Tally will need to be unique 
-#         #so we will use the key as the data too
-#         currentTallyKey = getKeyValues(row, tallyKeyPropertys.split(), TallyKey)
-#         if(not getattr(row,'Key') == '*'):
-#             currentTallyKeyIndex = tableManager.addKeyIndex('Tally', currentTallyKey, True)
-#         else:
-#             currentTallyKeyIndex = None
-#             
-#         #this is a special case can this be fixed 
-#         values = []
-#         values.append(currentSGKIndex)
-#         values.append(currentCUTKIndex)
-#         values.append(currentTallyKeyIndex)
-#         values.append(currentTDKIndex)
-#         values.append(getattr(row,'Count'))#this value is stored as a long and is giving problems, this is why we are extracting data manualy here.
-#         values.append(int(getattr(row,'SumKPI')))#and i think this is a long too.
-#         values.append(createdBy)
-#         values.append(createdDate)
-#         
-#         tempCountTreeLookupKey = (currentSGKIndex, currentCUTKIndex)
-#         if not tempCountTreeLookup.has_key(tempCountTreeLookupKey):
-#             tableManager.addKeyIndex('CountTree', countTreeKey, True)
-#             tempCountTreeLookup[tempCountTreeLookupKey] = [values, ]
-#         elif getattr(row, "Key") == "*":
-#             assert len(tempCountTreeLookup[tempCountTreeLookupKey]) == 1
-#             tempCountTreeLookup[tempCountTreeLookupKey][0][3] = None
-#         elif not getattr(row, "Key") == "*":
-#             tempCountTreeLookup[tempCountTreeLookupKey].append(values)
-#             tableManager.addKeyIndex('CountTree', countTreeKey, True)
-#             
-#         
-#             
-#         #
-# #        for propName in countTreesPropertys:          
-# #            values.append(getattr(row, propName))
-#         #countTreesData.append(CountTreesData(*values))
-#     
-#     for lst in tempCountTreeLookup.values():
-#         for valueList in lst:
-#             countTreesData.append(CountTreesData(*valueList))
-#     
-#     #if countTreeKeys has no item then no data was read
-#     #so dont try to get keys for Tally
-#     if len(countTreeKeys) > 0:
-#         tallyKeys = tableManager.getOrderdKeys('Tally')
-#         insertData('Tally', tallyFields.split(), tallyKeys, cursor)    
-#     
-#     insertData('CountTree', countTreesFields.split(), countTreesData, cursor)
-    
-    
-    
     
 def readPlotTable(vw, db):
     log.lg('norm','START reading plot table')
@@ -587,59 +273,9 @@ def readPlotTable(vw, db):
         plot.Save()
         log.lg('low','Created Record :' + str(plot.rowID))
         
-#         plotKey = getKeyValues(row, plotKeyPropertys.split(), PlotKey)
-#         plotKeys.append(plotKey)
-#         
-#         currentCUTK = getKeyValues(row, cuttingUnitKeyPropertys, CuttingUnitKey)
-#         
-#         currentStTK = StratumKey(getattr(row, stratumKeyPropertys))
-#            
-#         values = []
-#         values.append(tableManager.getKeyIndex('Stratum', currentStTK))
-#         values.append(tableManager.getKeyIndex('CuttingUnit', currentCUTK))
-#         for propName in plotDataPropertys:
-#             if propName in {'Slope', 'Aspect', 'XCoord', 'YCoord', 'ZCoord'}:
-#                 value = getattr(row, propName)
-#                 if value == '':
-#                     value = None
-#                 else:
-#                     value = float(value)
-#                 values.append(value)
-#             else:
-#                 values.append(getattr(row, propName))
-#         values.append(createdBy)
-#         values.append(createdDate)
-#         plotData.append(PlotData(*values))
-#         
-#     tableManager.addKeyIndexs('Plot', plotKeys)
-#         
-#     insertData('Plot', plotDataFields.split(), plotData,cursor)
         
 def readTreeTable(vw, db):
     log.lg('norm','START reading tree table, this may take a while')
-    
-#     treeKeys = []
-#     treeData = []
-#     treeKeyPropertys = 'Stratum CutUnit Plot Tree'
-# TreeKey = collections.namedtuple('TreeKey', treeKeyPropertys)
-# 
-# treeDataFields = '''TreeDefaultValue_CN Stratum_CN SampleGroup_CN CuttingUnit_CN Plot_CN 
-#     TreeNumber STM Species CountOrMeasure TreeCount 
-#     KPI SeenDefectPrimary SeenDefectSecondary RecoverablePrimary 
-#     Initials LiveDead Grade HeightToFirstLiveLimb PoleLength ClearFace 
-#     CrownRatio DBH DRC TotalHeight MerchHeightPrimary MerchHeightSecondary 
-#     FormClass UpperStemDOB UpperStemHeight DBHDoubleBarkThickness 
-#     TopDIBPrimary TopDIBSecondary DefectCode DiameterAtDefect VoidPercent Remarks CreatedBy CreatedDate'''
-# TreeData = collections.namedtuple('TreeData', treeDataFields)
-# 
-# treeDataPropertys = '''Tree STM Sp CM TreeCnt KPI SDefP SDefS RecDefP 
-#     Initials LD TreeGrade HgtFLL PoleLen Clear CR DBH DRCOB TotHt MrchHtP 
-#     MrchHtS FC UStemDOB HgtUStem DBHDBT TopDIBP TopDIBS DefectCode
-#     DiamDefPt VoidPct Remarks'''
-#     
-#     
-#     tempTDKIndexTable = dict()
-#     tempSgIndexTable = dict()
     
     from CruiseDAL.DataObjects import CuttingUnitDO
     from CruiseDAL.DataObjects import StratumDO
@@ -685,19 +321,10 @@ def readTreeTable(vw, db):
     
         
         #find a treeDefault for the tree
-#         tdv = db.ReadSingleRow[TreeDefaultValueDO]("TreeDefaultValue", 
-#                                                    """JOIN SampleGroupTreeDefaultValue AS sgtdv 
-#                                                    ON TreeDefaultValue.TreeDefaultValue_CN = sgtdv .TreeDefaultValue_CN
-#                                                    WHERE sgtdv.SampleGroup_CN = ? and Species = ?""", Array[Object]((sg.SampleGroup_CN, row.Sp )))
         tdv =  db.ReadSingleRow[TreeDefaultValueDO]("TreeDefaultValue", 
                                                    """JOIN SampleGroupTreeDefaultValue AS sgtdv 
                                                    ON TreeDefaultValue.TreeDefaultValue_CN = sgtdv .TreeDefaultValue_CN
                                                    WHERE sgtdv.SampleGroup_CN = ? and Species = ? AND Chargeable = ?""", Array[Object]((sg.SampleGroup_CN, row.Sp, row.YC )))
-#         for d in sg.TreeDefaultValues:
-#             print d.TreeDefaultValue_CN
-#             tdv = d
-#         if tryTDVCorectYC:
-#             tdv = tryTDVCorectYC 
         if not tdv:
             tdv = db.ReadSingleRow[TreeDefaultValueDO]("TreeDefaultValue", 
                                                     """JOIN SampleGroupTreeDefaultValue AS sgtdv 
@@ -780,156 +407,6 @@ def readTreeTable(vw, db):
         tree.Save()
         #print('Created  Record :' + sale.rowID)
         
-        
-        
-        
-#         treeKey = getKeyValues(row, treeKeyPropertys.split(), TreeKey)
-#         treeKeys.append(treeKey)
-#         
-#         currentStTK = StratumKey(getattr(row, stratumKeyPropertys))
-#         currentStTKIndex = tableManager.getKeyIndex('Stratum', currentStTK)
-#         
-#         currentSGK = getKeyValues(row, sampleGroupKeyPropertys.split(), SampleGroupKey)
-#         currentSGKIndex = tableManager.getKeyIndex('SampleGroup', currentSGK)
-#         
-#         currentCUTK = CuttingUnitKey(getattr(row,'CutUnit'))
-#         currentCUTKIndex = tableManager.getKeyIndex('CuttingUnit', currentCUTK)
-#         
-#         currentPTK = getKeyValues(row, plotKeyPropertys.split(), PlotKey)
-#         currentPTKIndex = tableManager.getKeyIndex('Plot', currentPTK)
-#         
-#         crzMeth = tableManager.getTag('Stratum', currentStTK)
-#         
-# #         if currentPTKIndex == 0: #WHAT? why am I creating plot records for tree based methods
-# #             
-# #             if crzMeth in ['STR', '3P', '100','S3P', '3 P']:
-# #                 log.lg('norm', 'missing plot reference found, generating plot record')
-# #                 currentPTKIndex = tableManager.addKeyIndex('Plot', currentPTK)
-# #                 #'Stratum_CN CuttingUnit_CN PlotNumber Slope Aspect IsEmpty XCoordinate YCoordinate ZCoordinate MetaData Remarks CreatedBy CreatedDate'
-# #                 newPTData = PlotData(currentStTKIndex, currentCUTKIndex, currentPTK.Plot,0,None,None,None,None,None,None,None, createdBy, '')
-# #                 insertData('Plot', plotDataFields.split(), [newPTData],cursor)
-#         
-#         #specal condition: if a tree record can't be associated with a TDV, because it doesn't have a species
-#         #update it's accosated plot with it's kpi value and dont create a tree record. 
-#         #this is because plot kpi values were stored in the tree table
-#         try:
-#             currentSGTDVK = getKeyValues(row, sampleGroupDefaultKeyPropertys.split(), SampleGroupDefaultKey)
-#             currentTDKIndex = tableManager.getTag('SampleGroupDefault', currentSGTDVK).TreeDefaultValue_CN
-#         except: 
-#             if getattr(row, 'Tree') == '0':
-#                 updateStmt = 'UPDATE Plot set KPI = {kpiVal} WHERE rowid = {plot_cn};'.format(kpiVal = getattr(row, 'KPI'), plot_cn = currentPTKIndex)
-#                 log.lg('low',updateStmt)
-#                 cursor.execute(updateStmt)
-#             continue # do not add tree to tree table 
-#         
-# #        currentCountTreeKey = getKeyValues(row, countTreeKeyPropertys.split(), CountTreeKey)
-# #        currentCountTreeKeyIndex = tableManager.getKeyIndex('CountTree', currentCountTreeKey)
-#         
-#         if crzMeth in ['S3P', '3P', '3 P']:
-#             currentCountTreeKey = getKeyValues(row, countTreeKeyPropertys.split(), CountTreeKey)
-#             currentCountTreeKeyIndex = tableManager.getKeyIndex('CountTree', currentCountTreeKey)
-#             kpiValue = int(getattr(row, 'KPI'))
-#             #only if crzMeth == S3P?
-#             treeEstimateData = [[kpiValue, currentCountTreeKeyIndex], ]
-#             insertData('TreeEstimate','KPI CountTree_CN'.split(), treeEstimateData, cursor)
-#             #create update statment that will add kpiValue to CountTree.KPI in database
-#             updateStmt = 'UPDATE CountTree set SumKPI = SumKPI + ? WHERE CountTree_CN = ?;'
-#             log.lg('low',updateStmt)
-#             cursor.execute(updateStmt, treeEstimateData[0])
-#             
-#             if crzMeth == 'S3P' and getattr(row, 'CM') == 'C':
-#                 continue # do not add tree to tree table 
-#             
-#             
-# #            threePCode = getattr(row, '3Pcode')
-# #            if threePCode == 3:
-# #                threePSGK = currentSGK.replace(SG = '3P')
-# #                if tableManager.hasKey(currentSGK) == False:
-# #                    tableManager.addKeyIndex("SampleGroup", threePSGK)
-# #                    tableManager.setTag("SampleGroup", threePSGK, getattr(row, "ProdP"))
-# #                    #HACK 
-# #                    cursor.execute('''INSERT OR FAIL INTO SampleGroup (Stratum_CN, Code, CutLeave, UOM, PrimaryProduct, SecondaryProduct, DefaultLiveDead)
-# #                        SELECT Stratum_CN, :code, CutLeave, UOM, PrimaryProduct, SecondaryProduct, DefaultLiveDead  FROM SampleGroup
-# #                        WHERE Stratum_CN = :str AND Code = :oldCode);''', str = currentStKIndex, code = currentSGK.SG )
-# #                    currentSGKIndex = tableManager("SampleGroup", threepSGK)
-# #                
-# #
-# #                else:
-# #                    sqlStr = '''UPDATE SampleGroup Set PrimaryProduct = :pp WHERE Stratum_CN = :str AND Code = :code;'''
-# #                    cursor.execute(sqlStr, pp = getattr(row, "ProdP"), str = currentStKIndex, code = currentSGK.SG )
-# #                    if tableManager.getTag('SampleGroup', threePSGK) != getattr(row, 'ProdP'):
-# #                        threePSGK = threePSGK.replace(SG = '3P-{pp}'.format(pp = getattr(row, 'ProdP')))
-# #                        currentSGKIndex = tableManager.addKeyIndex('SampleGroup', threePSGK, true)
-# #                        #HACK
-# #                        cursor.execute('''INSERT OR FAIL INTO SampleGroup (Stratum_CN, Code, CutLeave, UOM, PrimaryProduct, SecondaryProduct, DefaultLiveDead)
-# #                        SELECT Stratum_CN, :code, CutLeave, UOM, PrimaryProduct, SecondaryProduct, DefaultLiveDead  FROM SampleGroup
-# #                        WHERE Stratum_CN = :str AND Code = :oldCode);''', str = currentStKIndex, code = currentSGK.SG )
-# #                    else:
-# #                        currentSGKIndex = tableManager("SampleGroup", threepSGK)
-#                 
-#                 
-# #1/7/13 removed this condition because cruise processing prefers to added up count tree values 
-# #        if crzMeth in ['STR', '3P', '3 P']:
-# #            currentCountTreeKey = getKeyValues(row, countTreeKeyPropertys.split(), CountTreeKey)
-# #            currentCountTreeKeyIndex = tableManager.getKeyIndex('CountTree', currentCountTreeKey)
-# #            updateStmt = 'UPDATE CountTree set TreeCount = TreeCount + 1 WHERE CountTree_CN = {0};'.format(currentCountTreeKeyIndex)
-# #            log.lg('low',updateStmt)
-# #            cursor.execute(updateStmt)
-# #            
-#         
-#         if tempTDKIndexTable.has_key(currentTDKIndex) == False:
-#             chargableCode = getattr(row, "YC")
-#             tempTDKIndexTable[currentTDKIndex] = [chargableCode,]
-#             chargableCode = '"{0}"'.format(chargableCode) if (chargableCode != None) else "C"
-#             updateStatment = 'UPDATE TreeDefaultValue SET Chargeable = {chargableCode} WHERE TreeDefaultValue_CN = {TDKIndex};'.format(chargableCode = chargableCode, TDKIndex = currentTDKIndex)
-#             log.lg('low', updateStatment)
-#             cursor.execute(updateStatment)
-#         elif (getattr(row, "YC") in tempTDKIndexTable[currentTDKIndex]) == False:
-#             chargableCode = getattr(row, "YC")
-#             tempTDKIndexTable[currentTDKIndex].append(chargableCode)
-#             insertStmt = 'INSERT INTO TreeDefaultValue(PrimaryProduct, Species, LiveDead, CullPrimary, HiddenPrimary, CullSecondary, HiddenSecondary, Recoverable, ContractSpecies, TreeGrade, MerchHeightLogLength, MerchHeightType, FormClass, BarkThicknessRatio, AverageZ, ReferenceHeightPercent,Chargeable)  SELECT PrimaryProduct, Species, LiveDead, CullPrimary, HiddenPrimary, CullSecondary, HiddenSecondary, Recoverable, ContractSpecies, TreeGrade, MerchHeightLogLength, MerchHeightType, FormClass, BarkThicknessRatio, AverageZ, ReferenceHeightPercent , "{chargableCode}" FROM  TreeDefaultValue WHERE TreeDefaultValue_CN = {TDKIndex};'.format(TDKIndex = currentTDKIndex, chargableCode = chargableCode)
-#             log.lg('low', insertStmt)
-#             currentTDKIndex = cursor.execute(insertStmt)
-#             currentTDKIndex = cursor.execute('SELECT last_insert_rowid() as ID;').fetchone()[0]
-#         
-#         if tempSgIndexTable.has_key(currentSGKIndex) == False:
-#             prodSCode = getattr(row, "ProdS")
-#             tempSgIndexTable[currentSGKIndex] = prodSCode
-#             prodSCode = '"{0}"'.format(prodSCode) if (prodSCode != None) else "02"
-#             updateStatment = 'UPDATE SampleGroup SET SecondaryProduct = {prodS} WHERE SampleGroup_CN = {SgIndex};'.format(prodS = prodSCode, SgIndex = currentSGKIndex)
-#             log.lg('low', updateStatment)
-#             cursor.execute(updateStatment)
-#         elif tempSgIndexTable[currentSGKIndex] != getattr(row, "ProdS"):
-#             #raise Exception("same SG different Secondary Product") #TODO fix me
-#             continue
-#             pass
-#                 
-#         values = []
-#         values.append(currentTDKIndex)
-#         values.append(currentStTKIndex)
-#         values.append(currentSGKIndex)
-#         values.append(currentCUTKIndex)
-#         values.append(currentPTKIndex)
-#         for propName in treeDataPropertys:
-#             if propName == 'CR': #CR = crown ratio
-#                 value = getattr(row, propName)
-#                 if value == '':
-#                     value = None
-#                 else:
-#                     value = float(value)
-#                 values.append(value)
-#             else:
-#                 values.append(getattr(row, propName))
-#         values.append(createdBy)
-#         values.append(createdDate)
-#         treeData.append(TreeData(*values))
-#         
-#        
-#         
-#     tableManager.addKeyIndexs('Tree', treeKeys)
-#     
-#     insertData('Tree', treeDataFields.split(), treeData, cursor)
-    
     
 def readLogTable(vw, db):
     log.lg('norm','START reading log table, this may take a while')
@@ -966,7 +443,8 @@ def readLogTable(vw, db):
                 AND Stratum.Code = ?
                 AND Plot.PlotNumber = ?''', Array[Object]((row.Tree, str.strip(row.CutUnit), str.strip(row.Stratum), row.Plot)))
         if not tree:
-            log.lg('high unable to locate Tree record in log table Tree num: ' + row.Tree + ' Unit Code: ' + row.CutUnit + ' St Code: ' + row.Stratum + ' Plot Num: ' + row.Plot)
+            log.lg('high', 'unable to locate Tree record in log table Tree num: ' + row.Tree + ' Unit Code: ' + row.CutUnit + ' St Code: ' + row.Stratum + ' Plot Num: ' + row.Plot)
+            continue
         
         lg = LogDO(db)
         if getattrInt(row, 'FBSFlag') != tree.IsFallBuckScale: 
@@ -1051,7 +529,13 @@ def readGlobalConfigTable(vw, db):
             g.Block = row.Block
             g.Key = row.Key
             g.Value = row.Value
-            g.Save()
+            try:
+                g.Save()
+                pass
+            except Exception as e:
+                log.lg('high', 'unable to convert global rec Key:' + str(row.Key) + '|' + e.ToString())
+                pass
+            
         
         
     
